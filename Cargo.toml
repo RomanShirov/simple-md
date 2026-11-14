@@ -2,8 +2,9 @@
 name = "simple-md"
 version = "0.1.0"
 edition = "2024"
+rust-version = "1.100"
 description = "Simple Markdown Viewer"
 publish = false
 
 [dependencies]
-gpui = "=0.2.2"
+gpui-kit = { version = "=0.9.1", default-features = false }

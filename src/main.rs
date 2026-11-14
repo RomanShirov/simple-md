@@ -1,31 +1,23 @@
-use gpui::{
-    App, Application, Bounds, Context, TitlebarOptions, Window, WindowBounds, WindowOptions, div,
-    prelude::*, px, rgb, size,
-};
+mod markdown;
 
-struct HelloWorld;
+use gpui_kit::base::{ColorTokens, Theme, ThemeAppearance};
+use gpui_kit::{App, AppContext, Bounds, TitlebarOptions, WindowBounds, WindowOptions, px, size};
+use markdown::MarkdownPreview;
 
-impl Render for HelloWorld {
-    fn render(&mut self, _window: &mut Window, _cx: &mut Context<Self>) -> impl IntoElement {
-        div()
-            .size_full()
-            .flex()
-            .items_center()
-            .justify_center()
-            .bg(rgb(0x20242b))
-            .text_color(rgb(0xf0f0f0))
-            .text_3xl()
-            .child("Hello World")
-    }
-}
+const EXAMPLE_MARKDOWN: &str = include_str!("../assets/example.md");
 
 fn main() {
-    Application::new().run(|cx: &mut App| {
-        cx.on_window_closed(|cx| cx.quit()).detach();
+    gpui_kit::application().run(|cx: &mut App| {
+        gpui_kit::init(cx);
+        let theme = Theme::global_mut(cx);
+        theme.appearance = ThemeAppearance::Dark;
+        theme.tokens.colors = ColorTokens::dark();
+        cx.on_window_closed(|cx, _| cx.quit()).detach();
 
         let bounds = Bounds::centered(None, size(px(800.0), px(600.0)), cx);
         let options = WindowOptions {
             window_bounds: Some(WindowBounds::Windowed(bounds)),
+            window_min_size: Some(size(px(500.0), px(0.0))),
             titlebar: Some(TitlebarOptions {
                 title: Some("Simple MD".into()),
                 ..Default::default()
@@ -33,7 +25,9 @@ fn main() {
             ..Default::default()
         };
 
-        if let Err(error) = cx.open_window(options, |_, cx| cx.new(|_| HelloWorld)) {
+        if let Err(error) = gpui_kit::open_window(options, cx, |_, cx| {
+            cx.new(|cx| MarkdownPreview::new(EXAMPLE_MARKDOWN, cx))
+        }) {
             eprintln!("Failed to open Simple MD: {error}");
             cx.quit();
             return;
