@@ -1,0 +1,9 @@
+[package]
+name = "simple-md"
+version = "0.1.0"
+edition = "2024"
+description = "Simple Markdown Viewer"
+publish = false
+
+[dependencies]
+gpui = "=0.2.2"
