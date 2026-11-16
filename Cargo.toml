@@ -7,4 +7,4 @@ description = "Simple Markdown Viewer"
 publish = false
 
 [dependencies]
-gpui-kit = { version = "=0.9.1", default-features = false }
+gpui-kit = { version = "=0.9.1", default-features = false, features = ["component"] }

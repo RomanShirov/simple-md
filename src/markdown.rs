@@ -34,6 +34,11 @@ impl MarkdownPreview {
 
         Self { document, style }
     }
+
+    pub fn set_source(&mut self, source: &str, cx: &mut Context<Self>) {
+        self.document
+            .update(cx, |document, cx| document.set_text(source, cx));
+    }
 }
 
 impl Render for MarkdownPreview {
